@@ -2,9 +2,9 @@ spring:
   application:
     name: goaps
   datasource:
-    url: jdbc:postgresql://postgres:5432/auth_db
-    username: postgres
-    password: yourpassword
+    url: ${DATABASE_URL:jdbc:postgresql://postgres:5432/auth_db}
+    username: ${DATABASE_USERNAME:${POSTGRES_USER:postgres}}
+    password: ${DATABASE_PASSWORD:${POSTGRES_PASSWORD:yourpassword}}
   jpa:
     hibernate:
       ddl-auto: update
@@ -14,10 +14,13 @@ spring:
         format_sql: true
 
 jwt:
-  secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+  secret-key: ${JWT_SECRET_KEY:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
 
 logging:
   level:
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
     com.goaps.config: DEBUG
+
+server:
+  port: ${PORT:8080}
