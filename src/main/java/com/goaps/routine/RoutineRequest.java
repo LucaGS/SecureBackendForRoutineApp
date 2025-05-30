@@ -6,5 +6,4 @@ import lombok.Data;
 public class RoutineRequest {
     private String name;
     private String description;
-    private Integer userId;
 }
