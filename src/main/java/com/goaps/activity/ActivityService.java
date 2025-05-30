@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 @Service
 public class ActivityService {
-    private final AcitvityRepository acitvityRepository;
+    private final ActivityRepository acitvityRepository;
 
 
 }
