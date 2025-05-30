@@ -1,11 +1,9 @@
 package com.goaps.routine;
 
 import com.goaps.user.User;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,7 +22,7 @@ public class RoutineController {
         return ResponseEntity.ok(routineService.create(request));
     }
     @GetMapping()
-    public ResponseEntity<List<Routine>> GetAllUserRoutines(
+    public ResponseEntity<List<RoutineResponse>> GetAllUserRoutines(
             @AuthenticationPrincipal User userDetails
     ){
         int userId = userDetails.getId();
