@@ -51,14 +51,21 @@ public class RoutineService {
      *
      * @return Liste von Routine-Objekten, die vom eingeloggten Benutzer erstellt wurden
      */
-    public List<Routine> listAllUserRoutines() {
-        // Holt den aktuell eingeloggten Benutzer aus dem Spring Security Context
+    public List<RoutineResponse> listAllUserRoutines() {
+        // Holt den aktuell eingeloggten Benutzer
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        // Ruft alle Routinen aus der Datenbank ab und filtert nach Routinen, die dem Benutzer gehören
+        // Filtert Routinen nach Benutzer und mappt sie in RoutineResponse
         return repository.findAll()
                 .stream()
-                .filter(routine -> Objects.equals(routine.getUser().getId(), user.getId())) // Vergleicht User-IDs
-                .toList(); // Wandelt den Stream in eine Liste um und gibt sie zurück
+                .filter(routine -> Objects.equals(routine.getUser().getId(), user.getId()))
+                .map(routine -> new RoutineResponse(
+                        routine.getId(),
+                        routine.getName(),
+                        routine.getDescription()
+                ))
+                .collect(Collectors.toList());
     }
+
+
 }
