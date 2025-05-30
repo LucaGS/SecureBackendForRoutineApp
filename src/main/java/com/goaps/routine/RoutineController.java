@@ -16,7 +16,7 @@ public class RoutineController {
     private final RoutineService routineService;
 
     @PostMapping()
-    public ResponseEntity<Routine> Create(
+    public ResponseEntity<RoutineResponse> Create(
             @RequestBody RoutineRequest request
     ){
         return ResponseEntity.ok(routineService.create(request));

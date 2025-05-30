@@ -5,6 +5,7 @@ package com.goaps.routine;
 import com.goaps.auth.AuthenticationResponse;
 import com.goaps.user.User;
 import com.goaps.user.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,7 +32,7 @@ public class RoutineService {
      * @param request Objekt, das die Eingabedaten für die Routineerstellung enthält (Name, Beschreibung)
      * @return Die erstellte und in der Datenbank gespeicherte Routine
      */
-    public Routine create(RoutineRequest request) {
+    public RoutineResponse create(RoutineRequest request) {
         // Ermittelt den aktuell authentifizierten Benutzer aus dem Security Context
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -43,7 +44,12 @@ public class RoutineService {
                 .build();
 
         // Speichert die Routine in der Datenbank und gibt das gespeicherte Objekt zurück
-        return repository.save(routine);
+        routine = repository.save(routine);
+        return RoutineResponse.builder()
+                .id(routine.getId())
+                .name(routine.getName())
+                .description(routine.getDescription())
+                .build();
     }
 
     /**
@@ -65,6 +71,20 @@ public class RoutineService {
                         routine.getDescription()
                 ))
                 .collect(Collectors.toList());
+    }
+    public RoutineResponse updateRoutine(RoutineChangeRequest request){
+        Routine routine = repository.findById(request.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Routine not found with id: " + request.getId()));
+        routine.setName(request.getName());
+        routine.setDescription(request.getDescription());
+
+        Routine updatedRoutine = repository.save(routine);
+
+        return RoutineResponse.builder()
+                .id(updatedRoutine.getId())
+                .name(updatedRoutine.getName())
+                .description(updatedRoutine.getDescription())
+                .build();
     }
 
 
