@@ -21,11 +21,8 @@ public class RoutineController {
     ){
         return ResponseEntity.ok(routineService.create(request));
     }
-    @GetMapping()
-    public ResponseEntity<List<RoutineResponse>> GetAllUserRoutines(
-            @AuthenticationPrincipal User userDetails
-    ){
-        int userId = userDetails.getId();
-        return ResponseEntity.ok(routineService.listAllUserRoutines());
+    @GetMapping("/all")
+    public List<RoutineResponse> listAllUserRoutines() {
+        return routineService.listAllUserRoutines();
     }
 }
