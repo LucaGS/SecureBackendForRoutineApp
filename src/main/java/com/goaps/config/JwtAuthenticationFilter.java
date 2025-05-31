@@ -38,7 +38,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             log.debug("No valid auth header found");
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            filterChain.doFilter(request, response);
             return;
         }
 
@@ -64,17 +64,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                             new WebAuthenticationDetailsSource().buildDetails(request)
                     );
                     SecurityContextHolder.getContext().setAuthentication(authToken);
-                    filterChain.doFilter(request, response);
                 } else {
                     log.debug("Token is not valid for user: {}", userEmail);
-                    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                 }
-            } else {
-                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             }
         } catch (Exception e) {
             log.error("Error processing JWT token", e);
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         }
+
+        filterChain.doFilter(request, response);
     }
 }
