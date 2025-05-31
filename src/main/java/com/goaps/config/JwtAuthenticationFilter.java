@@ -35,24 +35,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         final String authHeader = request.getHeader("Authorization");
         log.debug("Auth header: {}", authHeader);
-        
+
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             log.debug("No valid auth header found");
-            filterChain.doFilter(request, response);
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
 
         final String jwt = authHeader.substring(7);
         log.debug("JWT token: {}", jwt);
-        
+
         try {
             final String userEmail = jwtService.extractUsername(jwt);
             log.debug("Extracted username: {}", userEmail);
-            
+
             if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
                 log.debug("Loaded user details for: {}", userEmail);
-                
+
                 if (jwtService.isTokenValid(jwt, userDetails)) {
                     log.debug("Token is valid for user: {}", userEmail);
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
@@ -64,14 +64,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                             new WebAuthenticationDetailsSource().buildDetails(request)
                     );
                     SecurityContextHolder.getContext().setAuthentication(authToken);
+                    filterChain.doFilter(request, response);
                 } else {
                     log.debug("Token is not valid for user: {}", userEmail);
+                    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                 }
+            } else {
+                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             }
         } catch (Exception e) {
             log.error("Error processing JWT token", e);
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         }
-        
-        filterChain.doFilter(request, response);
     }
 }
