@@ -1,7 +1,5 @@
 package com.goaps.activity;
 
-import com.goaps.routine.RoutineRequest;
-import com.goaps.routine.RoutineResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +9,7 @@ import java.util.List;
 @AllArgsConstructor
 @RestController
 @RequestMapping("api/v1/Activity")
-public class AcitvityController {
+public class ActivityController {
     private final ActivityService activityService;
     @PostMapping()
     public ResponseEntity<ActivityResponse> Create(
