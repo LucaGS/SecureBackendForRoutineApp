@@ -5,6 +5,7 @@ import com.goaps.routine.RoutineRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,8 +36,13 @@ public class ActivityService {
                .duration(activity.getDuration())
                .build();
     }
-    public List<ActivityResponse>getAllForRoutine(int routineId){
-        return activityRepository.findAllByRoutine_Id(routineId).stream()
+    public List<ActivityResponse> getAllForRoutine(int routineId) {
+        List<Activity> activities = activityRepository.findAllByRoutine_Id(routineId);
+        if (activities == null || activities.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        return activities.stream()
                 .map(activity -> ActivityResponse.builder()
                         .position(activity.getPosition())
                         .id(activity.getId())

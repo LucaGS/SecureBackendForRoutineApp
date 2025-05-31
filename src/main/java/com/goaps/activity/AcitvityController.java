@@ -19,8 +19,8 @@ public class AcitvityController {
     ){
         return ResponseEntity.ok(activityService.create(request));
     }
-    @GetMapping()
-    public List<ActivityResponse> listAllUserRoutines(@RequestParam int routineId) {
+    @GetMapping("/routine/{routineId}")
+    public List<ActivityResponse> listAllUserRoutines(@PathVariable int routineId) {
         return activityService.getAllForRoutine(routineId);
     }
 }
