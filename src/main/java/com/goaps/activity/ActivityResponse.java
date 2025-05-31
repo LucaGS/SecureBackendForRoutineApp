@@ -6,8 +6,8 @@ import lombok.Data;
 
 @Builder
 @Data
-public class ActivityRequest {
-    private Integer routineId;
+public class ActivityResponse {
+    private Integer id;
     private String name;
     private String description;
     private Integer duration;

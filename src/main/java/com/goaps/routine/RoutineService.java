@@ -2,12 +2,9 @@
 package com.goaps.routine;
 
 // Importiert benötigte Klassen aus anderen Modulen und Bibliotheken
-import com.goaps.auth.AuthenticationResponse;
 import com.goaps.user.User;
-import com.goaps.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 

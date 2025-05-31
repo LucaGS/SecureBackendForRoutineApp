@@ -22,6 +22,7 @@ public class Activity {
     private String name;
     private String description;
     private Integer duration;
+    private Integer position;
     @ManyToOne
     @JoinColumn(name = "routine_id")
     private Routine routine;
