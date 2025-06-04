@@ -53,4 +53,11 @@ public class ActivityService {
                 .collect(Collectors.toList());
     }
 
+    public void updatePositions(List<PositionChangeRequest> requests) {
+        requests.forEach(request ->{
+            Activity activity = activityRepository.findById(request.getActivityId()).orElseThrow();
+            activity.setPosition(request.getPosition());
+            activityRepository.save(activity);
+        });
+    }
 }

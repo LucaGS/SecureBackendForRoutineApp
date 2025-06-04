@@ -10,15 +10,26 @@ import java.util.List;
 @RestController
 @RequestMapping("api/v1/Activity")
 public class ActivityController {
+
     private final ActivityService activityService;
+
     @PostMapping()
     public ResponseEntity<ActivityResponse> Create(
             @RequestBody ActivityRequest request
     ){
         return ResponseEntity.ok(activityService.create(request));
     }
+
     @GetMapping("/routine/{routineId}")
     public List<ActivityResponse> listAllUserRoutines(@PathVariable int routineId) {
         return activityService.getAllForRoutine(routineId);
+    }
+
+    @PostMapping("/Update")
+    public ResponseEntity<Void> updateActivityPositions(
+            @RequestBody List<PositionChangeRequest> requests
+    ){
+        activityService.updatePositions(requests);
+        return ResponseEntity.ok().build();
     }
 }
